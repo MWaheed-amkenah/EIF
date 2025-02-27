@@ -1,0 +1,54 @@
+import { useState } from "react";
+import { Card, CardContent } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+
+export default function GreetingCardApp() {
+  const [name, setName] = useState("");
+  const [submitted, setSubmitted] = useState(false);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    setSubmitted(true);
+  };
+
+  const handleReset = () => {
+    setName("");
+    setSubmitted(false);
+  };
+
+  return (
+    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-4">
+      {!submitted ? (
+        <Card className="p-6 w-full max-w-md bg-white shadow-lg rounded-lg">
+          <CardContent>
+            <h2 className="text-xl font-bold mb-4 text-center">Enter Your Name</h2>
+            <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+              <Input
+                type="text"
+                placeholder="Your Name"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                required
+                className="p-2 border border-gray-300 rounded-lg"
+              />
+              <Button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600">
+                Generate Greeting Card
+              </Button>
+            </form>
+          </CardContent>
+        </Card>
+      ) : (
+        <Card className="p-6 w-full max-w-md bg-white shadow-lg rounded-lg text-center">
+          <CardContent>
+            <h2 className="text-2xl font-bold text-blue-500 mb-4">Greetings, {name}!</h2>
+            <p className="text-gray-700">Wishing you a wonderful day ahead! 🎉</p>
+            <Button onClick={handleReset} className="mt-4 bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600">
+              Generate Another Card
+            </Button>
+          </CardContent>
+        </Card>
+      )}
+    </div>
+  );
+}
