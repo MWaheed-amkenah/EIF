@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eid Greeting Card</title>
+    <style>
+        @font-face {
+            font-family: 'Janna';
+            src: url('Janna.ttf'); /* Ensure Janna.ttf is in the project */
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            font-family: 'Poppins', sans-serif;
+            text-align: center;
+            background: white;
+        }
+
+        .card-container {
+            position: relative;
+            width: 800px;
+            max-width: 100%;
+            text-align: center;
+        }
+
+        .card-image {
+            width: 100%;
+            border-radius: 10px;
+        }
+
+        .user-name-button {
+            position: absolute;
+            bottom: 100px; /* Moved up */
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 22px;
+            font-weight: bold;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            width: 50%;
+            text-align: center;
+            line-height: 45px;
+            background-color: #7D45EC; /* Matches button color */
+            border-radius: 25px;
+        }
+
+        .download-button {
+            position: absolute;
+            right: 20px;
+            top: 20px;
+            background: #c49b32;
+            color: white;
+            padding: 10px 20px;
+            font-size: 18px;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+        }
+
+        .download-button:hover {
+            background: #a37d2a;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="card-container" id="greetingCard">
+        <img src="Gray White Vintage Eid Mubarak Card.png" alt="Eid Mubarak Card" class="card-image">
+        <div class="user-name-button" id="userNamePlaceholder"></div>
+    </div>
+
+    <button class="download-button" onclick="downloadCard()">Download</button>
+
+    <script>
+        const params = new URLSearchParams(window.location.search);
+        const name = params.get("name");
+        const lang = params.get("lang") || "en";
+
+        // Ensure name appears inside the button
+        if (name) {
+            document.getElementById("userNamePlaceholder").textContent = name;
+        } else {
+            document.getElementById("userNamePlaceholder").textContent = "Your Name";
+        }
+
+        // Apply Arabic font if selected
+        if (lang === "ar") {
+            document.body.style.direction = "rtl";
+            document.body.style.fontFamily = "Janna, sans-serif";
+        } else {
+            document.body.style.direction = "ltr";
+            document.body.style.fontFamily = "'Poppins', sans-serif";
+        }
+
+        // Function to download the card as an image
+        function downloadCard() {
+            html2canvas(document.getElementById("greetingCard")).then(canvas => {
+                let link = document.createElement("a");
+                link.download = `Eid-Greeting-${name}.png`;
+                link.href = canvas.toDataURL("image/png");
+                link.click();
+            });
+        }
+    </script>
+
+    <!-- Include HTML2Canvas for Screenshot -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+</body>
+</html>

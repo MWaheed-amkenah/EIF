@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Amkenah Greeting</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        @font-face {
+            font-family: 'Janna';
+            src: url('Janna.ttf'); /* Ensure Janna.ttf is in the same folder */
+        }
+
+        body {
+            background: linear-gradient(135deg, #6a00f4, #6900ff, #00c2ff);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            font-family: 'Poppins', sans-serif;
+            transition: all 0.3s ease-in-out;
+        }
+        .container {
+            color: white;
+        }
+        img {
+            width: 500px;
+        }
+        button {
+            background: white;
+            color: black;
+            padding: 10px 20px;
+            font-size: 18px;
+            border-radius: 10px;
+            border: none;
+            cursor: pointer;
+            box-shadow: 2px 2px 10px rgba(0,0,0,0.2);
+        }
+        button:hover {
+            background: #ddd;
+        }
+
+        /* Pop-up Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 20px;
+            box-shadow: 2px 2px 10px rgba(0,0,0,0.3);
+            border-radius: 10px;
+            text-align: center;
+        }
+        .modal input {
+            padding: 10px;
+            font-size: 16px;
+            width: 80%;
+            margin-bottom: 15px;
+        }
+        .modal button {
+            background: blue;
+            color: white;
+            padding: 10px 20px;
+            font-size: 18px;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+        }
+        .modal button:hover {
+            background: darkblue;
+        }
+        .close {
+            background: red;
+            color: white;
+            padding: 5px 10px;
+            border: none;
+            cursor: pointer;
+        }
+
+        /* Language Dropdown */
+        .lang-dropdown {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: white;
+            padding: 5px;
+            border-radius: 5px;
+            box-shadow: 2px 2px 10px rgba(0,0,0,0.2);
+        }
+        .lang-dropdown select {
+            border: none;
+            background: transparent;
+            font-size: 16px;
+            padding: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Language Dropdown -->
+    <div class="lang-dropdown">
+        <select id="languageSelect" onchange="toggleLanguage()">
+            <option value="en">🇬🇧 English</option>
+            <option value="ar">🇸🇦 العربية</option>
+        </select>
+    </div>
+
+    <div class="container">
+        <img src="logo.png" alt="Amkenah Logo">
+        <br><br>
+        <button onclick="openModal()" id="helloBtn">Hello</button>
+    </div>
+
+    <!-- Pop-up Modal -->
+    <div class="modal" id="nameModal">
+        <h3 id="nameLabel">Enter Your Name</h3>
+        <input type="text" id="userName" placeholder="Your Name">
+        <br>
+        <button onclick="generateGreeting()" id="greetingBtn">Generate Greeting</button>
+        <br><br>
+        <button class="close" onclick="closeModal()">Close</button>
+    </div>
+
+    <script>
+        function openModal() {
+            document.getElementById("nameModal").style.display = "block";
+        }
+
+        function closeModal() {
+            document.getElementById("nameModal").style.display = "none";
+        }
+
+        function generateGreeting() {
+            let name = document.getElementById("userName").value.trim();
+            let lang = document.getElementById("languageSelect").value;
+            if (name) {
+                window.location.href = `greeting.html?name=${encodeURIComponent(name)}&lang=${lang}`;
+            } else {
+                alert("Please enter your name!");
+            }
+        }
+
+        function toggleLanguage() {
+            let lang = document.getElementById("languageSelect").value;
+            document.body.style.opacity = 0;
+
+            setTimeout(() => {
+                if (lang === "ar") {
+                    document.documentElement.setAttribute("lang", "ar");
+                    document.body.style.direction = "rtl";
+                    document.body.style.fontFamily = "Janna, sans-serif";
+                    document.getElementById("helloBtn").textContent = "مرحبا";
+                    document.getElementById("nameLabel").textContent = "أدخل اسمك";
+                    document.getElementById("greetingBtn").textContent = "إنشاء تهنئة";
+                } else {
+                    document.documentElement.setAttribute("lang", "en");
+                    document.body.style.direction = "ltr";
+                    document.body.style.fontFamily = "'Poppins', sans-serif";
+                    document.getElementById("helloBtn").textContent = "Hello";
+                    document.getElementById("nameLabel").textContent = "Enter Your Name";
+                    document.getElementById("greetingBtn").textContent = "Generate Greeting";
+                }
+                document.body.style.opacity = 1;
+            }, 300);
+        }
+    </script>
+
+</body>
+</html>

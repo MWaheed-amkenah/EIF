@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enter Your Name</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            font-family: Arial, sans-serif;
+            background: white;
+        }
+        .box {
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px rgba(0,0,0,0.2);
+            text-align: center;
+        }
+        input {
+            padding: 10px;
+            font-size: 16px;
+            width: 80%;
+            margin-bottom: 15px;
+        }
+        button {
+            background: blue;
+            color: white;
+            padding: 10px 20px;
+            font-size: 18px;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover { background: darkblue; }
+    </style>
+</head>
+<body>
+    <div class="box">
+        <h3>Name</h3>
+        <input type="text" id="userName" placeholder="Enter your name">
+        <br>
+        <button onclick="generateGreeting()">Greeting</button>
+    </div>
+
+    <script>
+        function generateGreeting() {
+            let name = document.getElementById("userName").value.trim();
+            if (name) {
+                window.location.href = `greeting.html?name=${encodeURIComponent(name)}`;
+            } else {
+                alert("Please enter a name!");
+            }
+        }
+    </script>
+</body>
+</html>
