@@ -50,14 +50,14 @@ def add_name_to_gif(input_gif_path, name_text, eng_font_path="29lt-bukra.ttf", a
     except EOFError:
         pass
 
-    output_bytes = io.BytesIO()
+    output_gif = io.BytesIO()
     frames[0].save(
-        output_bytes,
+        output_gif,
         format='GIF',
         save_all=True,
         append_images=frames[1:],
         duration=duration,
         loop=0
     )
-    output_bytes.seek(0)
-    return output_bytes
+    output_gif.seek(0)
+    return output_gif
