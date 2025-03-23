@@ -1,0 +1,5 @@
+Flask
+Pillow
+arabic-reshaper
+python-bidi
+gunicorn
