@@ -40,13 +40,17 @@ def add_name_to_gif(input_gif_path, name_text, eng_font_path="29lt-bukra.ttf", a
             text_width = bbox[2] - bbox[0]
             text_height = bbox[3] - bbox[1]
 
-            # Correct placement: adjust based on frame height
+            # Correct placement: ~320px from the bottom as per your HTML preview
             position_x = (width - text_width) / 2
-            position_y = height - text_height - 20  # Adjust to place text near the bottom
+            position_y = height - 321 - text_height / 2
 
-            # Add subtle shadow for better visibility
+            # Add subtle shadow for visibility
             draw.text((position_x + 2, position_y + 2), name_text, font=font, fill=(0, 0, 0, 150))
-            draw.text((position_x, position_y), name_text, font=font, fill="white")  # Main text
+
+            # Draw bold-like effect by multiple passes
+            bold_offsets = [(0,0), (1,0), (0,1), (1,1)]
+            for offset in bold_offsets:
+                draw.text((position_x + offset[0], position_y + offset[1]), name_text, font=font, fill="black")
 
             frames.append(frame.convert("P"))
             gif.seek(gif.tell() + 1)
@@ -67,6 +71,6 @@ def add_name_to_gif(input_gif_path, name_text, eng_font_path="29lt-bukra.ttf", a
     return output_gif
 
 # ✅ Example usage:
-with open("output.gif", "wb") as f:
+with open("EIF-personalized.gif", "wb") as f:
     f.write(add_name_to_gif("EIF.gif", "نورة الفرم").read())
-print("✅ GIF with correct Arabic text generated!")
+print("✅ GIF with correct Arabic and placement generated!")
