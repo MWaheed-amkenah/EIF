@@ -5,9 +5,11 @@ import io
 import os
 
 def contains_arabic(text):
+    """Check if the text contains Arabic characters."""
     return any('\u0600' <= c <= '\u06FF' or '\u0750' <= c <= '\u077F' for c in text)
 
 def reshape_arabic_text(text):
+    """Fix Arabic letter ordering and direction."""
     reshaped_text = arabic_reshaper.reshape(text)
     return get_display(reshaped_text)
 
@@ -16,17 +18,19 @@ def add_name_to_gif(input_gif_path, name_text, eng_font_path="29lt-bukra.ttf", a
     frames = []
     duration = gif.info.get('duration', 100)
 
+    # Ensure Arabic text is reshaped and correct font is chosen
     if contains_arabic(name_text):
         name_text = reshape_arabic_text(name_text)
         font_path = ar_font_path
     else:
         font_path = eng_font_path
 
+    # Check if the font file exists
     if not os.path.exists(font_path):
         print(f"⚠️ Font {font_path} not found! Using default font.")
         font = ImageFont.load_default()
     else:
-        font = ImageFont.truetype(font_path, font_size)
+        font = ImageFont.truetype(font_path, font_size, layout_engine=ImageFont.LAYOUT_RAQM)
 
     try:
         while True:
@@ -38,18 +42,17 @@ def add_name_to_gif(input_gif_path, name_text, eng_font_path="29lt-bukra.ttf", a
             text_width = bbox[2] - bbox[0]
             text_height = bbox[3] - bbox[1]
 
-            position_y = height - 321 - text_height / 2
-
-            # ✅ For Arabic (RTL), align text from right-center
+            # ✅ Correct Positioning for Arabic
+            position_y = height - 320  # Adjust to align under the text
             if contains_arabic(name_text):
-                position_x = (width + text_width) / 2 - text_width
+                position_x = width - text_width - 50  # Align RTL correctly
             else:
                 position_x = (width - text_width) / 2
 
             # Add shadow
             draw.text((position_x + 2, position_y + 2), name_text, font=font, fill=(0, 0, 0, 150))
 
-            # Draw bold by layering
+            # Draw bold effect by layering multiple times
             bold_offsets = [(0,0), (1,0), (0,1), (1,1)]
             for offset in bold_offsets:
                 draw.text((position_x + offset[0], position_y + offset[1]), name_text, font=font, fill="black")
@@ -59,6 +62,7 @@ def add_name_to_gif(input_gif_path, name_text, eng_font_path="29lt-bukra.ttf", a
     except EOFError:
         pass
 
+    # Save as in-memory or output file
     output_gif = io.BytesIO()
     frames[0].save(
         output_gif,
@@ -74,4 +78,4 @@ def add_name_to_gif(input_gif_path, name_text, eng_font_path="29lt-bukra.ttf", a
 # ✅ Example usage:
 with open("EIF-personalized.gif", "wb") as f:
     f.write(add_name_to_gif("EIF.gif", "نورة الفرم").read())
-print("✅ GIF generated with corrected RTL alignment and font placement!")
+print("✅ GIF generated with correct Arabic alignment and font!")
