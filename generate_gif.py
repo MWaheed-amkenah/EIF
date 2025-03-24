@@ -11,7 +11,7 @@ def reshape_arabic_text(text):
     reshaped_text = arabic_reshaper.reshape(text)
     return get_display(reshaped_text)
 
-def add_name_to_gif(input_gif_path, name_text, eng_font_path="29lt-bukra.ttf", ar_font_path="29lt-bukra-bold.ttf", font_size=24):
+def add_name_to_gif(input_gif_path, name_text, eng_font_path="29lt-bukra.ttf", ar_font_path="29lt-bukra.ttf", font_size=24):
     gif = Image.open(input_gif_path)
     frames = []
     duration = gif.info.get('duration', 100)
