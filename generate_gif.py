@@ -47,10 +47,12 @@ def add_name_to_gif(input_gif_path, name_text, eng_font_path="29lt-bukra.ttf", a
 
             # Proper positioning for Arabic (RTL: align to the right)
             position_y = height - 320  # Adjust according to GIF layout
-            if contains_arabic(name_text):
-                position_x = width - text_width - 50  # Align right
-            else:
-                position_x = (width - text_width) / 2  # Center for English
+    if contains_arabic(name_text):
+    # RTL: Start drawing from right
+            position_x = width - text_width - 50
+    else:
+    # LTR: Center align
+         position_x = (width - text_width) / 2
 
             # Add shadow
             draw.text((position_x + 2, position_y + 2), name_text, font=font, fill=(0, 0, 0, 150))
