@@ -1,5 +1,5 @@
 Flask
-Pillow
+Pillow[raqm]
 arabic-reshaper
 python-bidi
 gunicorn
