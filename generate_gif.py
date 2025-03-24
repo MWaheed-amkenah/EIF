@@ -16,14 +16,12 @@ def add_name_to_gif(input_gif_path, name_text, eng_font_path="29lt-bukra.ttf", a
     frames = []
     duration = gif.info.get('duration', 100)
 
-    # Ensure Arabic text is reshaped
     if contains_arabic(name_text):
         name_text = reshape_arabic_text(name_text)
         font_path = ar_font_path
     else:
         font_path = eng_font_path
 
-    # Check if the font file exists
     if not os.path.exists(font_path):
         print(f"⚠️ Font {font_path} not found! Using default font.")
         font = ImageFont.load_default()
@@ -40,14 +38,18 @@ def add_name_to_gif(input_gif_path, name_text, eng_font_path="29lt-bukra.ttf", a
             text_width = bbox[2] - bbox[0]
             text_height = bbox[3] - bbox[1]
 
-            # Correct placement: ~320px from the bottom as per your HTML preview
-            position_x = (width - text_width) / 2
             position_y = height - 321 - text_height / 2
 
-            # Add subtle shadow for visibility
+            # ✅ For Arabic (RTL), align text from right-center
+            if contains_arabic(name_text):
+                position_x = (width + text_width) / 2 - text_width
+            else:
+                position_x = (width - text_width) / 2
+
+            # Add shadow
             draw.text((position_x + 2, position_y + 2), name_text, font=font, fill=(0, 0, 0, 150))
 
-            # Draw bold-like effect by multiple passes
+            # Draw bold by layering
             bold_offsets = [(0,0), (1,0), (0,1), (1,1)]
             for offset in bold_offsets:
                 draw.text((position_x + offset[0], position_y + offset[1]), name_text, font=font, fill="black")
@@ -57,7 +59,6 @@ def add_name_to_gif(input_gif_path, name_text, eng_font_path="29lt-bukra.ttf", a
     except EOFError:
         pass
 
-    # Save as in-memory or output file
     output_gif = io.BytesIO()
     frames[0].save(
         output_gif,
@@ -73,4 +74,4 @@ def add_name_to_gif(input_gif_path, name_text, eng_font_path="29lt-bukra.ttf", a
 # ✅ Example usage:
 with open("EIF-personalized.gif", "wb") as f:
     f.write(add_name_to_gif("EIF.gif", "نورة الفرم").read())
-print("✅ GIF with correct Arabic and placement generated!")
+print("✅ GIF generated with corrected RTL alignment and font placement!")
