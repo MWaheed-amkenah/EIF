@@ -13,7 +13,7 @@ def reshape_arabic_text(text):
     reshaped_text = arabic_reshaper.reshape(text)
     return get_display(reshaped_text)
 
-def add_name_to_gif(input_gif_path, name_text, eng_font_path="29lt-bukra.ttf", ar_font_path="29lt-bukra.ttf", font_size=24):
+def add_name_to_gif(input_gif_path, name_text, eng_font_path="29lt-bukra.ttf", ar_font_path="Amiri-Regular.ttf", font_size=24):
     gif = Image.open(input_gif_path)
     frames = []
     duration = gif.info.get('duration', 100)
@@ -25,7 +25,7 @@ def add_name_to_gif(input_gif_path, name_text, eng_font_path="29lt-bukra.ttf", a
     else:
         font_path = eng_font_path
 
-    # Check if the font file exists
+    # Load font or fallback
     if not os.path.exists(font_path):
         print(f"⚠️ Font {font_path} not found! Using default font.")
         font = ImageFont.load_default()
@@ -45,16 +45,16 @@ def add_name_to_gif(input_gif_path, name_text, eng_font_path="29lt-bukra.ttf", a
             text_width = bbox[2] - bbox[0]
             text_height = bbox[3] - bbox[1]
 
-            # Proper positioning for Arabic (RTL: align to the right)
-            position_y = height - 320  # Adjust according to GIF layout
-    if contains_arabic(name_text):
-    # RTL: Start drawing from right
-            position_x = width - text_width - 50
-    else:
-    # LTR: Center align
-         position_x = (width - text_width) / 2
+            # Positioning (RTL or LTR)
+            position_y = height - 320  # Adjust if needed
+            if contains_arabic(name_text):
+                # RTL: align right
+                position_x = width - text_width - 50
+            else:
+                # LTR: center align
+                position_x = (width - text_width) / 2
 
-            # Add shadow
+            # Draw shadow
             draw.text((position_x + 2, position_y + 2), name_text, font=font, fill=(0, 0, 0, 150))
 
             # Add bold effect
@@ -67,7 +67,7 @@ def add_name_to_gif(input_gif_path, name_text, eng_font_path="29lt-bukra.ttf", a
     except EOFError:
         pass
 
-    # Save the modified GIF in-memory
+    # Save GIF in-memory
     output_gif = io.BytesIO()
     frames[0].save(
         output_gif,
@@ -83,4 +83,4 @@ def add_name_to_gif(input_gif_path, name_text, eng_font_path="29lt-bukra.ttf", a
 # ✅ Example usage:
 with open("EIF-personalized.gif", "wb") as f:
     f.write(add_name_to_gif("EIF.gif", "نورة الفرم").read())
-print("✅ GIF generated with proper RTL handling and fallback!")
+print("✅ GIF generated with proper RTL alignment and fallback fonts!")
